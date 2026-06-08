@@ -1,21 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('customer-form');
   const customerIdInput = document.getElementById('customer-id');
-  const messageDiv = document.getElementById('message');
-
-  let messageTimer = null;
-
-  function showMessage(text, isError = false) {
-    clearTimeout(messageTimer);
-    messageDiv.textContent = text;
-    messageDiv.className = isError
-      ? 'p-3 rounded text-white bg-red-500'
-      : 'p-3 rounded text-white bg-green-500';
-    messageDiv.classList.remove('hidden');
-    messageTimer = setTimeout(() => {
-      messageDiv.classList.add('hidden');
-    }, 4000);
-  }
 
   function escapeHtml(str) {
     return String(str)
@@ -85,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
         tbody.appendChild(tr);
       });
     } catch (err) {
-      showMessage('Erro ao carregar clientes: ' + err.message, true);
+      showToast('Erro ao carregar clientes: ' + err.message, 'error');
     } finally {
       showLoading(false);
     }
@@ -108,10 +93,10 @@ document.addEventListener('DOMContentLoaded', () => {
       showLoading(true);
       try {
         await fetchAPI(`/customers/${deleteBtn.dataset.id}`, { method: 'DELETE' });
-        showMessage('Cliente excluído com sucesso.');
+        showToast('Cliente excluído com sucesso.', 'success');
         await loadCustomers();
       } catch (err) {
-        showMessage('Erro ao excluir cliente: ' + err.message, true);
+        showToast('Erro ao excluir cliente: ' + err.message, 'error');
       } finally {
         showLoading(false);
       }
@@ -136,18 +121,18 @@ document.addEventListener('DOMContentLoaded', () => {
           method: 'PUT',
           body: JSON.stringify(body),
         });
-        showMessage('Cliente atualizado com sucesso.');
+        showToast('Cliente atualizado com sucesso.', 'success');
       } else {
         await fetchAPI('/customers', {
           method: 'POST',
           body: JSON.stringify(body),
         });
-        showMessage('Cliente cadastrado com sucesso.');
+        showToast('Cliente cadastrado com sucesso.', 'success');
       }
       clearForm();
       await loadCustomers();
     } catch (err) {
-      showMessage('Erro ao salvar cliente: ' + err.message, true);
+      showToast('Erro ao salvar cliente: ' + err.message, 'error');
     } finally {
       showLoading(false);
     }

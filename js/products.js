@@ -1,21 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('product-form');
   const productIdInput = document.getElementById('product-id');
-  const messageDiv = document.getElementById('message');
-
-  let messageTimer = null;
-
-  function showMessage(text, isError = false) {
-    clearTimeout(messageTimer);
-    messageDiv.textContent = text;
-    messageDiv.className = isError
-      ? 'p-3 rounded text-white bg-red-500'
-      : 'p-3 rounded text-white bg-green-500';
-    messageDiv.classList.remove('hidden');
-    messageTimer = setTimeout(() => {
-      messageDiv.classList.add('hidden');
-    }, 4000);
-  }
 
   function formatPrice(value) {
     return Number(value).toLocaleString('pt-BR', {
@@ -77,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
         tbody.appendChild(tr);
       });
     } catch (err) {
-      showMessage('Erro ao carregar produtos: ' + err.message, true);
+      showToast('Erro ao carregar produtos: ' + err.message, 'error');
     } finally {
       showLoading(false);
     }
@@ -112,10 +97,10 @@ document.addEventListener('DOMContentLoaded', () => {
       showLoading(true);
       try {
         await fetchAPI(`/products/${deleteBtn.dataset.id}`, { method: 'DELETE' });
-        showMessage('Produto excluído com sucesso.');
+        showToast('Produto excluído com sucesso.', 'success');
         await loadProducts();
       } catch (err) {
-        showMessage('Erro ao excluir produto: ' + err.message, true);
+        showToast('Erro ao excluir produto: ' + err.message, 'error');
       } finally {
         showLoading(false);
       }
@@ -140,18 +125,18 @@ document.addEventListener('DOMContentLoaded', () => {
           method: 'PUT',
           body: JSON.stringify(body),
         });
-        showMessage('Produto atualizado com sucesso.');
+        showToast('Produto atualizado com sucesso.', 'success');
       } else {
         await fetchAPI('/products', {
           method: 'POST',
           body: JSON.stringify(body),
         });
-        showMessage('Produto cadastrado com sucesso.');
+        showToast('Produto cadastrado com sucesso.', 'success');
       }
       clearForm();
       await loadProducts();
     } catch (err) {
-      showMessage('Erro ao salvar produto: ' + err.message, true);
+      showToast('Erro ao salvar produto: ' + err.message, 'error');
     } finally {
       showLoading(false);
     }

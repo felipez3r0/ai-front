@@ -6,25 +6,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const customerSelect = document.getElementById('order-customer');
   const itemsContainer = document.getElementById('items-container');
   const addItemBtn = document.getElementById('add-item-btn');
-  const messageDiv = document.getElementById('message');
   const orderDetail = document.getElementById('order-detail');
   const orderDetailContent = document.getElementById('order-detail-content');
   const closeDetailBtn = document.getElementById('close-detail-btn');
 
-  let messageTimer = null;
   let products = [];
 
   // ── Utilitários ─────────────────────────────────────────────────────────────
-
-  function showMessage(text, isError = false) {
-    clearTimeout(messageTimer);
-    messageDiv.textContent = text;
-    messageDiv.className = isError
-      ? 'p-3 rounded text-white bg-red-500'
-      : 'p-3 rounded text-white bg-green-500';
-    messageDiv.classList.remove('hidden');
-    messageTimer = setTimeout(() => messageDiv.classList.add('hidden'), 4000);
-  }
 
   function escapeHtml(str) {
     return String(str)
@@ -104,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (itemsContainer.querySelectorAll('.item-row').length > 1) {
         row.remove();
       } else {
-        showMessage('O pedido deve ter pelo menos um item.', true);
+        showToast('O pedido deve ter pelo menos um item.', 'error');
       }
     }
   });
@@ -166,7 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
       itemsContainer.innerHTML = '';
       addItemRow();
     } catch (err) {
-      showMessage('Erro ao carregar dados do formulário: ' + err.message, true);
+      showToast('Erro ao carregar dados do formulário: ' + err.message, 'error');
     }
   }
 
@@ -177,13 +165,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const customerId = Number(customerSelect.value);
     if (!customerId) {
-      showMessage('Selecione um cliente.', true);
+      showToast('Selecione um cliente.', 'error');
       return;
     }
 
     const rows = itemsContainer.querySelectorAll('.item-row');
     if (rows.length === 0) {
-      showMessage('Adicione pelo menos um item ao pedido.', true);
+      showToast('Adicione pelo menos um item ao pedido.', 'error');
       return;
     }
 
@@ -202,7 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     if (!valid) {
-      showMessage('Verifique os itens: produto e quantidade (inteiro ≥ 1) são obrigatórios.', true);
+      showToast('Verifique os itens: produto e quantidade (inteiro ≥ 1) são obrigatórios.', 'error');
       return;
     }
 
@@ -212,11 +200,11 @@ document.addEventListener('DOMContentLoaded', () => {
         method: 'POST',
         body: JSON.stringify({ customer_id: customerId, items }),
       });
-      showMessage('Pedido criado com sucesso.');
+      showToast('Pedido criado com sucesso.', 'success');
       closeForm();
       await loadOrders();
     } catch (err) {
-      showMessage('Erro ao criar pedido: ' + err.message, true);
+      showToast('Erro ao criar pedido: ' + err.message, 'error');
     } finally {
       showLoading(false);
     }
@@ -254,7 +242,7 @@ document.addEventListener('DOMContentLoaded', () => {
         tbody.appendChild(tr);
       });
     } catch (err) {
-      showMessage('Erro ao carregar pedidos: ' + err.message, true);
+      showToast('Erro ao carregar pedidos: ' + err.message, 'error');
     } finally {
       showLoading(false);
     }
@@ -273,7 +261,7 @@ document.addEventListener('DOMContentLoaded', () => {
       orderDetail.classList.remove('hidden');
       orderDetail.scrollIntoView({ behavior: 'smooth', block: 'start' });
     } catch (err) {
-      showMessage('Erro ao carregar detalhe do pedido: ' + err.message, true);
+      showToast('Erro ao carregar detalhe do pedido: ' + err.message, 'error');
     } finally {
       showLoading(false);
     }
