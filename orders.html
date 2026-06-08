@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pedidos — Armazém do Seu João</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100 min-h-screen">
+    <!-- Navbar -->
+    <nav class="bg-white shadow-sm">
+      <div
+        class="max-w-5xl mx-auto px-4 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3"
+      >
+        <span class="text-xl font-bold text-gray-800"
+          >🏪 Armazém do Seu João</span
+        >
+        <ul class="flex gap-6 text-sm font-medium text-gray-600">
+          <li>
+            <a href="index.html" class="hover:text-blue-600 hover:underline"
+              >Início</a
+            >
+          </li>
+          <li>
+            <a href="products.html" class="hover:text-blue-600 hover:underline"
+              >Produtos</a
+            >
+          </li>
+          <li>
+            <a href="customers.html" class="hover:text-blue-600 hover:underline"
+              >Clientes</a
+            >
+          </li>
+          <li>
+            <a
+              href="orders.html"
+              class="text-blue-600 font-semibold hover:underline"
+              >Pedidos</a
+            >
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Main -->
+    <main class="max-w-5xl mx-auto px-4 py-10">
+      <div class="flex items-center justify-between mb-6">
+        <h1 class="text-2xl font-bold text-gray-700">Pedidos</h1>
+        <button
+          id="toggle-form-btn"
+          class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg"
+        >
+          Novo Pedido
+        </button>
+      </div>
+
+      <!-- Formulário -->
+      <div id="form-container" class="hidden mb-6">
+        <div class="bg-white rounded-2xl shadow-md p-6">
+          <h2 class="text-lg font-semibold text-gray-700 mb-4">Criar Pedido</h2>
+
+          <form id="order-form" class="flex flex-col gap-4">
+            <!-- Cliente -->
+            <div>
+              <label
+                class="block text-sm font-medium text-gray-600 mb-1"
+                for="order-customer"
+              >
+                Cliente
+              </label>
+              <select
+                id="order-customer"
+                required
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+              >
+                <option value="">Carregando clientes...</option>
+              </select>
+            </div>
+
+            <!-- Itens -->
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-600"
+                  >Itens do Pedido</span
+                >
+                <button
+                  type="button"
+                  id="add-item-btn"
+                  class="px-3 py-1 bg-green-500 hover:bg-green-600 text-white text-sm font-medium rounded-lg"
+                >
+                  + Adicionar Item
+                </button>
+              </div>
+              <div id="items-container" class="flex flex-col gap-2"></div>
+            </div>
+
+            <div class="flex gap-3 items-center">
+              <button
+                type="submit"
+                class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg"
+              >
+                Criar Pedido
+              </button>
+              <button
+                type="button"
+                id="cancel-btn"
+                class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 text-sm font-medium rounded-lg"
+              >
+                Cancelar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Mensagem -->
+      <div id="message" class="hidden mb-4"></div>
+
+      <!-- Tabela de pedidos -->
+      <div class="bg-white rounded-2xl shadow-md overflow-hidden mb-6">
+        <table class="w-full text-sm text-gray-700">
+          <thead
+            class="bg-gray-50 text-xs uppercase text-gray-500 tracking-wide"
+          >
+            <tr>
+              <th class="px-4 py-3 text-left">#</th>
+              <th class="px-4 py-3 text-left">Cliente</th>
+              <th class="px-4 py-3 text-left">Total (R$)</th>
+              <th class="px-4 py-3 text-left">Data</th>
+              <th class="px-4 py-3 text-left">Ações</th>
+            </tr>
+          </thead>
+          <tbody id="orders-table-body" class="divide-y divide-gray-100">
+            <tr>
+              <td colspan="5" class="px-4 py-6 text-center text-gray-400">
+                Carregando...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Detalhe do pedido -->
+      <div id="order-detail" class="hidden bg-white rounded-2xl shadow-md p-6">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-lg font-semibold text-gray-700">Detalhe do Pedido</h2>
+          <button
+            id="close-detail-btn"
+            class="text-sm text-gray-400 hover:text-gray-600 font-medium"
+          >
+            Fechar ✕
+          </button>
+        </div>
+        <div id="order-detail-content"></div>
+      </div>
+    </main>
+
+    <script src="js/config.js"></script>
+    <script src="js/orders.js"></script>
+  </body>
+</html>

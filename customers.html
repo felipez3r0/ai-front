@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Clientes — Armazém do Seu João</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100 min-h-screen">
+    <!-- Navbar -->
+    <nav class="bg-white shadow-sm">
+      <div
+        class="max-w-5xl mx-auto px-4 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3"
+      >
+        <span class="text-xl font-bold text-gray-800"
+          >🏪 Armazém do Seu João</span
+        >
+        <ul class="flex gap-6 text-sm font-medium text-gray-600">
+          <li>
+            <a href="index.html" class="hover:text-blue-600 hover:underline"
+              >Início</a
+            >
+          </li>
+          <li>
+            <a href="products.html" class="hover:text-blue-600 hover:underline"
+              >Produtos</a
+            >
+          </li>
+          <li>
+            <a
+              href="customers.html"
+              class="text-blue-600 font-semibold hover:underline"
+              >Clientes</a
+            >
+          </li>
+          <li>
+            <a href="orders.html" class="hover:text-blue-600 hover:underline"
+              >Pedidos</a
+            >
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Main -->
+    <main class="max-w-5xl mx-auto px-4 py-10">
+      <div class="flex items-center justify-between mb-6">
+        <h1 class="text-2xl font-bold text-gray-700">Clientes</h1>
+        <button
+          id="toggle-form-btn"
+          class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg"
+        >
+          Novo Cliente
+        </button>
+      </div>
+
+      <!-- Formulário -->
+      <div id="form-container" class="hidden mb-6">
+        <div class="bg-white rounded-2xl shadow-md p-6">
+          <h2 class="text-lg font-semibold text-gray-700 mb-4">
+            Cadastrar / Editar Cliente
+          </h2>
+
+          <form
+            id="customer-form"
+            class="grid grid-cols-1 sm:grid-cols-2 gap-4"
+          >
+            <input type="hidden" id="customer-id" />
+
+            <div class="sm:col-span-2">
+              <input
+                type="text"
+                id="customer-name"
+                name="name"
+                required
+                placeholder="Nome do cliente"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+              />
+            </div>
+
+            <div>
+              <input
+                type="email"
+                id="customer-email"
+                name="email"
+                required
+                placeholder="E-mail"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+              />
+            </div>
+
+            <div>
+              <input
+                type="text"
+                id="customer-phone"
+                name="phone"
+                placeholder="Telefone (opcional)"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+              />
+            </div>
+
+            <div class="flex gap-3 items-center sm:col-span-2">
+              <button
+                type="submit"
+                class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg"
+              >
+                Salvar
+              </button>
+              <button
+                type="button"
+                id="cancel-btn"
+                class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 text-sm font-medium rounded-lg"
+              >
+                Cancelar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Mensagem -->
+      <div id="message" class="hidden mb-4"></div>
+
+      <!-- Tabela -->
+      <div class="bg-white rounded-2xl shadow-md overflow-hidden">
+        <table class="w-full text-sm text-gray-700">
+          <thead
+            class="bg-gray-50 text-xs uppercase text-gray-500 tracking-wide"
+          >
+            <tr>
+              <th class="px-4 py-3 text-left">Nome</th>
+              <th class="px-4 py-3 text-left">E-mail</th>
+              <th class="px-4 py-3 text-left">Telefone</th>
+              <th class="px-4 py-3 text-left">Ações</th>
+            </tr>
+          </thead>
+          <tbody id="customers-table-body" class="divide-y divide-gray-100">
+            <tr>
+              <td colspan="4" class="px-4 py-6 text-center text-gray-400">
+                Carregando...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+
+    <script src="js/config.js"></script>
+    <script src="js/customers.js"></script>
+    <script>
+      const formContainer = document.getElementById('form-container');
+      const toggleFormBtn = document.getElementById('toggle-form-btn');
+      const cancelBtn = document.getElementById('cancel-btn');
+      const customerForm = document.getElementById('customer-form');
+
+      toggleFormBtn.addEventListener('click', () => {
+        formContainer.classList.toggle('hidden');
+      });
+
+      cancelBtn.addEventListener('click', () => {
+        customerForm.reset();
+        document.getElementById('customer-id').value = '';
+        formContainer.classList.add('hidden');
+      });
+
+      document.addEventListener('click', (e) => {
+        if (e.target.closest('.edit-btn')) {
+          formContainer.classList.remove('hidden');
+          formContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    </script>
+  </body>
+</html>
